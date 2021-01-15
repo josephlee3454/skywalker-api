@@ -1,23 +1,51 @@
-import logo from './logo.svg';
+
+import React,{useState} from 'react'
 import './App.css';
+import Search from './componenets/Search';
+import {Router, navigate} from '@reach/router';
+import Display from './views/Display';
+
 
 function App() {
+const  [searchTerms, setSearchTerms] = useState({
+  category: 'people',
+  id: '',
+}
+)
+
+const [data,setData] = useState({})
+
+const changeHandler = e => {
+  setSearchTerms({
+    ...searchTerms,
+    [e.target.name]: e.target.value
+  })
+}
+
+const submitHandler = e => {
+  const {category, id} = searchTerms
+  navigate(`/${category}/${id}`);
+  console.log(searchTerms)
+  e.preventDefault();
+  }
+
+
+
+
+// const fetchData = () =>{
+//   const {category, id}= serachTerms
+//   axios.get(`https://swapi.dev/api/${category}/${}`)
+// }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+
+      <Search searchTerms= {searchTerms} submitHandler={submitHandler} changeHandler={changeHandler}/>
+      <Router >
+        <Display path="/:category/:id"/>
+      </Router>
+  
     </div>
   );
 }
